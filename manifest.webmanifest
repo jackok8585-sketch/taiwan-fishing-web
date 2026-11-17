@@ -1,0 +1,16 @@
+{
+  "name": "台灣海釣記",
+  "short_name": "台灣海釣記",
+  "description": "在八斗子開船、拋竿、搏魚的 3D 釣魚遊戲",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone"],
+  "orientation": "any",
+  "background_color": "#1c1612",
+  "theme_color": "#1c1612",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
