@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>釣魚人生</title>
 <meta name="description" content="在八斗子開船、拋竿、搏魚的 3D 釣魚遊戲。瀏覽器直接玩，手機電腦都可以。">
-<meta name="theme-color" content="#1c1612">
+<meta name="theme-color" content="#0e2747">
 <!-- 加入主畫面後全螢幕（iPhone、Android） -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -15,8 +15,8 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <style>
-  /* 遊戲畫布填滿整個視窗；載入條與說明疊在正中央 */
-  :root { --bg:#1c1612; --panel:#5a3418; --edge:#f3c96a; --fg:#fff6d6; --muted:#e2c897; --bar:#f2c14e; --danger:#ff8d7a; color-scheme: dark; }
+  /* 遊戲畫布填滿整個視窗；載入條疊在正中央（藍色，配合遊戲介面） */
+  :root { --bg:#0e2747; --panel:#163a66; --edge:#ffffff; --fg:#ffffff; --muted:#cfe6ff; --bar:#5cc8ff; --danger:#ff8d7a; color-scheme: dark; }
   html, body { margin:0; height:100%; overflow:hidden; background:var(--bg); color:var(--fg);
     font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif; overscroll-behavior:none; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
   #stage { position:fixed; inset:0; height:100dvh; }
@@ -24,12 +24,12 @@
   #overlay { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; text-align:center; pointer-events:none;
     padding:16px max(16px, env(safe-area-inset-right, 0px)) 16px max(16px, env(safe-area-inset-left, 0px)); }
   #overlay[hidden], #error[hidden], #a2hs[hidden] { display:none; }
-  h1 { margin:0; font-size:clamp(28px, 6vw, 44px); font-weight:900; letter-spacing:.08em; }
+  h1 { margin:0; text-shadow:0 3px 0 #08182e; font-size:clamp(28px, 6vw, 44px); font-weight:900; letter-spacing:.08em; }
   p { margin:0; color:var(--muted); font-size:15px; max-width:34em; line-height:1.6; }
   #track { width:min(360px, 80%); height:14px; border-radius:8px; background:var(--panel); border:2px solid var(--edge); overflow:hidden; }
   #fill { width:0%; height:100%; background:var(--bar); transition:width .2s; }
   #error { color:var(--danger); }
-  #a2hs { color:var(--fg); border:1px solid var(--edge); border-radius:10px; padding:8px 12px; background:rgba(90,52,24,.6); }
+  #a2hs { color:var(--fg); border:1px solid var(--edge); border-radius:10px; padding:8px 12px; background:rgba(22,58,102,.6); }
   @media (prefers-reduced-motion: reduce) { #fill { transition:none; } }
 </style>
 </head>
@@ -39,9 +39,8 @@
   <div id="overlay">
     <h1>釣魚人生</h1>
     <div id="track"><div id="fill"></div></div>
-    <p id="status">載入中，大約要下載 27 MB…</p>
+    <p id="status">載入中，遊戲即將開始</p>
     <p id="error" hidden></p>
-    <p id="tips">拋竿：按下竿 → 選方向、調釣棚 → 按住開槍蓄力、放開拋出。搏魚：魚喘的時候開槍再捲線，爆衝和往下鑽時撐住，▲▼ 調煞車。右上角可以開圖鑑。</p>
     <p id="a2hs" hidden>想要全螢幕：點 Safari 下方的「分享」→「加入主畫面」，之後從主畫面打開。</p>
   </div>
 </div>
@@ -81,7 +80,6 @@
   script.onload = function () {
     createUnityInstance(canvas, config, function (p) {
       fill.style.width = Math.round(p * 100) + "%";
-      if (p > 0.9) statusEl.textContent = "啟動中…";
     }).then(function () { started = true; overlay.hidden = true; canvas.focus(); }).catch(fail);
   };
   document.body.appendChild(script);
