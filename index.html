@@ -14,124 +14,47 @@
 <link rel="manifest" href="manifest.webmanifest?v=2">
 <link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=2">
-<link rel="preload" as="image" href="loading/harbor.png">
-<link rel="preload" as="image" href="loading/logo.png">
 <style>
-  :root { color-scheme:light; --navy:#153557; --cream:#fcfaf4; --muted:#657b8c; }
-  * { box-sizing:border-box; }
-  html,body { margin:0; width:100%; height:100%; overflow:hidden; background:#0e2747;
-    font-family:"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
-    overscroll-behavior:none; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
-  #stage { position:fixed; inset:0; height:100%; height:100dvh; }
-  #unity-canvas { display:block; width:100%; height:100%; background:#0e2747; outline:none; touch-action:none; }
-  #overlay { position:absolute; inset:0; isolation:isolate; overflow:hidden; color:var(--navy); pointer-events:none; background:#75b7d4; }
-  [hidden] { display:none!important; }
-  .harbor { position:absolute; inset:0; z-index:-3; width:100%; height:100%; object-fit:cover; object-position:51% 50%; }
-  #overlay::before { content:""; position:absolute; inset:0; z-index:-2;
-    background:linear-gradient(180deg,rgba(242,250,252,.16),transparent 35%,rgba(9,55,79,.15) 57%,rgba(9,39,62,.88)); }
-  #overlay::after { content:""; position:absolute; inset:0; z-index:-1; box-shadow:inset 0 0 140px rgba(17,57,78,.12); }
-  .loading-layout { width:100%; height:100%; max-width:1600px; margin:0 auto; display:grid; grid-template-rows:auto 1fr auto;
-    padding:max(28px,env(safe-area-inset-top,0px)) max(26px,env(safe-area-inset-right,0px)) max(42px,env(safe-area-inset-bottom,0px)) max(26px,env(safe-area-inset-left,0px)); }
-  .place { display:flex; gap:8px; align-items:center; justify-self:start; margin:0; padding:9px 13px;
-    border:1px solid rgba(255,255,255,.65); border-radius:999px; background:rgba(248,252,251,.84);
-    font-size:12px; line-height:1; letter-spacing:.12em; font-weight:650; box-shadow:0 2px 10px rgba(20,61,78,.04); }
-  .place svg { width:20px; height:16px; fill:none; stroke:#2d7893; stroke-width:1.65; stroke-linecap:round; }
-  .brand { align-self:center; justify-self:center; text-align:center; transform:translateY(-3vh); }
-  h1 { margin:0; line-height:1; }
-  .brand-logo { display:block; width:min(420px,76vw); height:auto; filter:drop-shadow(0 7px 12px rgba(19,61,90,.12)); }
-  .brand-rule { width:38px; height:3px; border:0; margin:20px auto 0; border-radius:8px; background:#f4d99a; }
-  .loading-bottom { width:min(408px,100%); justify-self:center; }
-  .loading-card { padding:24px 25px 22px; border-radius:20px; background:var(--cream);
-    border:1px solid rgba(255,255,255,.9); box-shadow:0 12px 38px rgba(6,31,50,.17),0 2px 5px rgba(6,31,50,.05); }
-  .loading-heading { display:flex; gap:16px; justify-content:space-between; align-items:baseline; margin-bottom:15px; }
-  .loading-heading h2 { margin:0; font-size:18px; line-height:1.4; letter-spacing:.07em; font-weight:750; }
-  #percent { color:#365a71; font-size:14px; font-weight:650; font-variant-numeric:tabular-nums; }
-  #track { width:100%; height:8px; border-radius:8px; background:#e3e9e8; overflow:hidden; }
-  #fill { width:0; height:100%; border-radius:inherit; background:linear-gradient(90deg,#25799b,#36adbd); transition:width .22s ease-out; }
-  .loading-caption { margin:13px 0 0; color:var(--muted); font-size:12px; line-height:1.6; letter-spacing:.04em; }
-  #a2hs { margin:15px 8px 0; color:#e8f2f3; text-align:center; font-size:11px; line-height:1.7; letter-spacing:.02em; }
-  .error-content { margin-top:16px; border-top:1px solid #e7dfd5; padding-top:14px; pointer-events:auto; }
-  #error { margin:0; color:#a44535; font-size:13px; line-height:1.6; }
-  #error-details { margin-top:10px; font-size:11px; line-height:1.6; color:#667985; }
-  #error-details summary { cursor:pointer; }
-  #error-message { display:block; max-height:88px; overflow:auto; margin-top:6px; overflow-wrap:anywhere; user-select:text; }
-  #retry { display:block; width:100%; min-height:44px; margin-top:14px; border:0; border-radius:10px; background:var(--navy);
-    color:#fff; font:inherit; font-size:14px; font-weight:650; cursor:pointer; }
-  #retry:focus-visible { outline:3px solid #edba5c; outline-offset:3px; }
-  #overlay[data-state="error"] #track { opacity:.45; }
-  @media (min-width:900px) and (min-height:600px) {
-    .loading-layout { padding:40px 48px 55px; }
-    .brand { transform:translateY(-1vh); }
-    .brand-logo { width:470px; }
-  }
-  @media (max-width:360px) {
-    .loading-layout { padding-left:20px; padding-right:20px; }
-    .loading-card { padding:20px; }
-  }
-  @media (max-height:520px) {
-    .loading-layout { padding:max(14px,env(safe-area-inset-top,0px)) max(22px,env(safe-area-inset-right,0px)) max(18px,env(safe-area-inset-bottom,0px)) max(22px,env(safe-area-inset-left,0px)); }
-    .place { padding:7px 11px; font-size:11px; }
-    .brand { transform:none; }
-    .brand-logo { width:min(290px,36vw); }
-    .brand-rule { margin-top:10px; height:2px; width:30px; }
-    .loading-bottom { width:min(370px,70vw); }
-    .loading-card { padding:16px 22px; border-radius:16px; }
-    .loading-heading { margin-bottom:10px; }
-    .loading-heading h2 { font-size:16px; }
-    .loading-caption { margin-top:9px; font-size:11px; }
-    #a2hs { margin-top:7px; font-size:10px; }
-    .error-content { margin-top:8px; padding-top:8px; }
-    #retry { margin-top:8px; min-height:40px; }
-    #overlay[data-state="error"] .brand-rule { display:none; }
-    #overlay[data-state="error"] .brand-logo { width:min(210px,25vw); }
-    #overlay[data-state="error"] #error-details { display:none; }
-  }
-  @media (prefers-reduced-motion:reduce) { #fill { transition:none; } }
+  /* 遊戲畫布填滿整個視窗；載入條疊在正中央（藍色，配合遊戲介面） */
+  :root { --bg:#0e2747; --panel:#163a66; --edge:#ffffff; --fg:#ffffff; --muted:#cfe6ff; --bar:#5cc8ff; --danger:#ff8d7a; color-scheme: dark; }
+  html, body { margin:0; height:100%; overflow:hidden; background:var(--bg); color:var(--fg);
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif; overscroll-behavior:none; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
+  #stage { position:fixed; inset:0; height:100dvh; }
+  #unity-canvas { display:block; width:100%; height:100%; background:var(--bg); outline:none; touch-action:none; }
+  #overlay { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; text-align:center; pointer-events:none;
+    padding:16px max(16px, env(safe-area-inset-right, 0px)) 16px max(16px, env(safe-area-inset-left, 0px)); }
+  #overlay[hidden], #error[hidden], #a2hs[hidden] { display:none; }
+  h1 { margin:0; text-shadow:0 3px 0 #08182e; font-size:clamp(28px, 6vw, 44px); font-weight:900; letter-spacing:.08em; }
+  p { margin:0; color:var(--muted); font-size:15px; max-width:34em; line-height:1.6; }
+  #track { width:min(360px, 80%); height:14px; border-radius:8px; background:var(--panel); border:2px solid var(--edge); overflow:hidden; }
+  #fill { width:0%; height:100%; background:var(--bar); transition:width .2s; }
+  #error { color:var(--danger); }
+  #a2hs { color:var(--fg); border:1px solid var(--edge); border-radius:10px; padding:8px 12px; background:rgba(22,58,102,.6); }
+  @media (prefers-reduced-motion: reduce) { #fill { transition:none; } }
+  .wordmark { display:block; height:1.4em; width:auto; max-width:80vw; object-fit:contain; }
 </style>
 </head>
 <body>
 <div id="stage">
-  <canvas id="unity-canvas" tabindex="-1" aria-label="釣魚人生遊戲"></canvas>
-  <div id="overlay" data-state="loading">
-    <img class="harbor" src="loading/harbor.png" alt="" width="1695" height="606" fetchpriority="high">
-    <main class="loading-layout" aria-label="遊戲載入畫面">
-      <p class="place"><svg viewBox="0 0 24 18" aria-hidden="true"><path d="M2 6c2-2 3-2 5 0s3 2 5 0 3-2 5 0 3 2 5 0M2 12c2-2 3-2 5 0s3 2 5 0 3-2 5 0 3 2 5 0"/></svg>八斗子漁港</p>
-      <div class="brand">
-        <h1><img class="brand-logo" src="loading/logo.png" alt="釣魚人生" width="1040" height="326"></h1>
-        <hr class="brand-rule" aria-hidden="true">
-      </div>
-      <div class="loading-bottom">
-        <section class="loading-card" aria-labelledby="loading-title">
-          <div class="loading-heading"><h2 id="loading-title">準備出海</h2><output id="percent" aria-hidden="true">0%</output></div>
-          <div id="track" role="progressbar" aria-label="遊戲載入進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="fill"></div></div>
-          <p id="status" class="loading-caption" role="status" aria-live="polite">正在載入遊戲，請稍候</p>
-          <div id="error-content" class="error-content" hidden>
-            <p id="error"></p>
-            <details id="error-details"><summary>查看錯誤資訊</summary><span id="error-message"></span></details>
-            <button id="retry" type="button">重新載入</button>
-          </div>
-        </section>
-        <p id="a2hs" hidden>Safari 分享 → 加入主畫面，即可全螢幕遊玩。</p>
-      </div>
-    </main>
+  <canvas id="unity-canvas" tabindex="-1"></canvas>
+  <div id="overlay">
+    <h1><img class="wordmark" src="loading/wordmark-v2.png" alt="釣魚人生" width="720" height="240"></h1>
+    <div id="track"><div id="fill"></div></div>
+    <p id="status">載入中，遊戲即將開始</p>
+    <p id="error" hidden></p>
+    <p id="a2hs" hidden>想要全螢幕：點 Safari 下方的「分享」→「加入主畫面」，之後從主畫面打開。</p>
   </div>
 </div>
 <script>
 (function () {
   var canvas = document.getElementById("unity-canvas"), overlay = document.getElementById("overlay");
-  var statusEl = document.getElementById("status"), fill = document.getElementById("fill");
-  var track = document.getElementById("track"), percent = document.getElementById("percent");
-  var started = false, failed = false, progress = 0;
+  var statusEl = document.getElementById("status"), errorEl = document.getElementById("error"), fill = document.getElementById("fill");
+  var started = false;
   function fail(msg) {
-    if (started || failed) return;
-    failed = true; overlay.dataset.state = "error";
-    document.getElementById("loading-title").textContent = "暫時無法啟航";
-    statusEl.textContent = "遊戲沒有成功啟動";
-    document.getElementById("error").textContent = "請確認網路連線，再重新載入一次。";
-    document.getElementById("error-message").textContent = String(msg).slice(0, 300);
-    document.getElementById("error-content").hidden = false; overlay.hidden = false;
+    statusEl.textContent = "遊戲沒有成功啟動。";
+    errorEl.textContent = String(msg).slice(0, 300);
+    errorEl.hidden = false; overlay.hidden = false;
   }
-  document.getElementById("retry").addEventListener("click", function () { window.location.reload(); });
   window.addEventListener("error", function (e) { if (!started) fail(e.message || "載入檔案失敗"); });
   window.addEventListener("unhandledrejection", function (e) { if (!started) fail(e.reason || "載入失敗"); });
   // iPhone／iPad 用 Safari 直接開（不是從主畫面）：提示可以加入主畫面變全螢幕
@@ -157,12 +80,8 @@
   script.onerror = function () { fail("讀不到遊戲載入程式"); };
   script.onload = function () {
     createUnityInstance(canvas, config, function (p) {
-      if (failed || !Number.isFinite(p)) return;
-      progress = Math.max(progress, Math.min(100, Math.max(0, Math.round(p * 100))));
-      fill.style.width = progress + "%"; percent.textContent = progress + "%";
-      track.setAttribute("aria-valuenow", String(progress));
-      if (progress === 100) statusEl.textContent = "即將啟航";
-    }).then(function () { if (failed) return; started = true; overlay.hidden = true; canvas.focus(); }).catch(fail);
+      fill.style.width = Math.round(p * 100) + "%";
+    }).then(function () { started = true; overlay.hidden = true; canvas.focus(); }).catch(fail);
   };
   document.body.appendChild(script);
 })();
