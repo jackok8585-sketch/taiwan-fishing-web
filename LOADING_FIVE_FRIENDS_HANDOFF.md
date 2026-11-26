@@ -2,6 +2,13 @@
 
 狀態：✅ 2026-11-26 正式上線並在公開網址驗收完成。使用者已授權 Claude 與 Codex 均可自行推送及發佈網站，不必互等核准。
 
+## 橫式手機滿版修正（2026-11-26，Codex）
+
+- 使用者回報橫式手機沒有滿版。原因是原本將整張 16:9 合照等比例放進視窗，較寬的手機會在左右留下延展區。
+- 橫式 `.loading-scene` 改填滿視窗，圖片使用 `object-fit:cover`、`object-position:50% 35%`；不拉伸人物，必要時裁掉少量上下邊緣。字標仍置中，寬度加上視窗高度上限，避免橫式字標過大。
+- 844×390 與 932×430 實際瀏覽器：場景框皆為 (0,0,視窗寬,視窗高)，沒有橫向溢出；五張臉可辨識。390×844 保留原本直式配置。版面截圖停 67% 只在本機 preview，測試 loader 沒有進 repo。
+- Unity 啟動 JavaScript 逐字未變，Build、設定、manifest、圖示與 update.sh 雜湊不變。正式站驗收見私人主專案最新 HANDOFF。
+
 ## 正式上線驗收（2026-11-26，Codex）
 
 - 網址：https://taiwan-fishing-web.vercel.app/ 。網站 PR #2 已合併，正式部署 commit `3825ecb82b0ccbef1d32f3580c9c7cef41443641`，Vercel 狀態成功。
@@ -15,7 +22,7 @@
 
 ## 最終實作
 
-- `index.html`：根據螢幕方向選直式或橫式背景；完整等比例呈現角色，不裁掉五張臉；較長或較寬螢幕用柔化延展背景填滿外圍。
+- `index.html`：根據螢幕方向選背景；直式維持完整合照與柔化延展，橫式使用 cover 鋪滿整個視窗，裁掉少量上下邊緣，五張臉可辨識。
 - 標題沿用 `loading/wordmark-v2.png`，以場景正中央 50%／50% 定位。背景沒有烤入標題、假進度條或載入文字。
 - `loading/friends-portrait-v2.webp`：941×1672，約 382 KiB。
 - `loading/friends-landscape-v2.webp`：1672×941，約 463 KiB。
