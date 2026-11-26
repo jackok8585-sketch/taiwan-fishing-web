@@ -36,16 +36,22 @@
   .loading-art img { display:block; width:100%; height:100%; object-fit:contain; }
   .loading-title { position:absolute; z-index:1; left:50%; top:50%; transform:translate(-50%,-50%);
     width:80%; margin:0; line-height:0; }
-  .wordmark { display:block; width:100%; height:auto; }
+  /* 2026-11-26：標題、進度條、文字改成像素風，跟遊戲裡的介面同一套（字型：俐方體 11 號，OFL） */
+  @font-face { font-family:"Cubic 11"; src:url("loading/Cubic_11.woff2") format("woff2"); font-display:swap; }
+  .wordmark { display:block; width:100%; height:auto; image-rendering:pixelated; }
   .loading-ui { position:absolute; z-index:2; left:12%; right:12%; bottom:max(7%,env(safe-area-inset-bottom,0px)); display:flex;
-    flex-direction:column; align-items:center; gap:10px; text-shadow:0 2px 3px #083750,0 0 8px #083750; }
-  #track { box-sizing:border-box; width:100%; height:18px; border-radius:999px;
-    background:rgba(5,69,93,.36); border:2px solid #fff; overflow:hidden;
-    box-shadow:0 1px 5px rgba(0,48,76,.28); }
-  #fill { width:0%; height:100%; background:linear-gradient(90deg,#5feaff,#21c5f4); border-radius:inherit;
+    flex-direction:column; align-items:center; gap:10px; font-family:"Cubic 11","Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+    text-shadow:2px 0 #1a1c2c,-2px 0 #1a1c2c,0 2px #1a1c2c,0 -2px #1a1c2c,2px 2px #1a1c2c,-2px 2px #1a1c2c,2px -2px #1a1c2c,-2px -2px #1a1c2c,0 4px #1a1c2c; }
+  #trackwrap { position:relative; width:100%; }
+  #pct { position:absolute; left:calc(100% + 12px); top:50%; transform:translateY(-50%); color:#ffcd75; font-size:clamp(12px,1.5vw,16px); white-space:nowrap; }
+  #track { box-sizing:border-box; width:100%; height:22px; padding:3px;
+    background:#1a1c2c; border:3px solid #f4e8cf; outline:3px solid #1a1c2c; overflow:hidden;
+    box-shadow:4px 7px 0 rgba(10,12,30,.45); }
+  #fill { width:0%; height:100%;
+    background:repeating-linear-gradient(90deg,transparent 0 14px,#1a1c2c 14px 18px),linear-gradient(180deg,#73eff7 0 25%,#41a6f6 25% 75%,#3b5dc9 75%);
     transition:width .2s; }
   p { margin:0; font-size:clamp(12px,3.4vw,16px); line-height:1.5; }
-  #status { color:#fff; font-weight:600; letter-spacing:.04em; }
+  #status { color:#fff; font-weight:400; letter-spacing:.04em; }
   #error { max-width:100%; padding:6px 10px; border-radius:8px; background:rgba(6,35,56,.88);
     color:#ffd5cb; font-size:13px; overflow-wrap:anywhere; text-shadow:none; }
   #a2hs { padding:5px 9px; border-radius:8px; background:rgba(6,35,56,.65); color:#fff;
@@ -58,12 +64,12 @@
     .loading-art img { object-fit:cover; object-position:50% 35%; }
     .loading-title { width:min(27vw,48dvh); }
     .loading-ui { left:30%; right:30%; bottom:max(5%,env(safe-area-inset-bottom,0px)); gap:8px; }
-    #track { height:16px; }
+    #track { height:20px; }
     p { font-size:clamp(12px,1.5vw,16px); }
   }
   @media (orientation:landscape) and (max-height:480px) {
     .loading-ui { left:27%; right:27%; bottom:max(5%,env(safe-area-inset-bottom,0px)); gap:5px; }
-    #track { height:13px; }
+    #track { height:18px; }
     #a2hs { font-size:10px; padding:3px 6px; }
     #error { font-size:11px; padding:3px 6px; }
   }
@@ -79,9 +85,9 @@
         <source media="(orientation:landscape)" srcset="loading/friends-landscape-v2.webp">
         <img src="loading/friends-portrait-v2.webp" alt="" width="941" height="1672" fetchpriority="high" decoding="async">
       </picture>
-      <h1 class="loading-title"><img class="wordmark" src="loading/wordmark-v2.png" alt="釣魚人生" width="720" height="240"></h1>
+      <h1 class="loading-title"><img class="wordmark" src="loading/wordmark-px.png" alt="釣魚人生" width="1296" height="432"></h1>
       <div class="loading-ui">
-        <div id="track"><div id="fill"></div></div>
+        <div id="trackwrap"><div id="track"><div id="fill"></div></div><span id="pct" aria-hidden="true"></span></div>
         <p id="status" role="status">載入中，遊戲即將開始</p>
         <p id="error" role="alert" hidden></p>
         <p id="a2hs" hidden>想要全螢幕：點 Safari 下方的「分享」→「加入主畫面」，之後從主畫面打開。</p>
@@ -125,6 +131,7 @@
   script.onload = function () {
     createUnityInstance(canvas, config, function (p) {
       fill.style.width = Math.round(p * 100) + "%";
+      var pct = document.getElementById("pct"); if (pct) pct.textContent = Math.round(p * 100) + "%";
     }).then(function () { started = true; overlay.hidden = true; canvas.focus(); }).catch(fail);
   };
   document.body.appendChild(script);
