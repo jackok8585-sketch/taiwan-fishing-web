@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-25",
+  "mode": "built-in image_gen",
+  "roster": [
+    "crab",
+    "jellyfish",
+    "turtle",
+    "orca",
+    "shark"
+  ],
+  "backgrounds_have_no_baked_logo_or_progress": true,
+  "title": "沿用獨立 wordmark-v2.png，由 CSS 置於畫面 50%／50%",
+  "assets": [
+    {
+      "file": "loading/friends-portrait-v2.webp",
+      "size": [
+        941,
+        1672
+      ],
+      "bytes": 391356,
+      "sha256": "180733d294c3f535efee0c38689147c948b41bc041d7d56331c261e1ae64bebd"
+    },
+    {
+      "file": "loading/friends-landscape-v2.webp",
+      "size": [
+        1672,
+        941
+      ],
+      "bytes": 474324,
+      "sha256": "d79a68d5a069867ef91800701c4e21b7456987cee43936fbc05a6401a3c59ba7"
+    }
+  ]
+}

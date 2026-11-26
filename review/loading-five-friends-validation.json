@@ -1,0 +1,55 @@
+{
+  "layoutFixture": {
+    "note": "使用正式 HTML/CSS 與本機測試 loader 固定 67%，未加入正式頁面",
+    "viewports": [
+      {
+        "size": [
+          390,
+          844
+        ],
+        "titleCenter": [
+          195,
+          421.984375
+        ]
+      },
+      {
+        "size": [
+          844,
+          390
+        ],
+        "titleCenter": [
+          421.984375,
+          195
+        ]
+      },
+      {
+        "size": [
+          1280,
+          720
+        ],
+        "titleCenter": [
+          640,
+          360
+        ]
+      }
+    ],
+    "allFiveFacesVisible": true,
+    "allImagesLoaded": true,
+    "consoleErrors": 0
+  },
+  "actualGame": {
+    "url": "http://127.0.0.1:8768/site/",
+    "latestBuildBase": "f2db603687e4ec1cdfb0fed8a86c9620053a3f1f",
+    "progress": "100%",
+    "overlayHidden": true,
+    "loginLoaded": true,
+    "guestButtonOpenedCharacterCreation": true,
+    "consoleErrors": 0
+  },
+  "failureFixture": {
+    "errorVisible": true,
+    "overlayVisible": true,
+    "message": "遊戲沒有成功啟動。"
+  },
+  "realIPhoneTested": false
+}
