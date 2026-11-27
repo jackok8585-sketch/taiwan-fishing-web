@@ -14,7 +14,7 @@
 <link rel="manifest" href="manifest.webmanifest?v=4">
 <link rel="apple-touch-icon" href="apple-touch-icon.png?v=4">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=4">
-<link rel="preload" as="image" href="loading/friends-px.png">
+<link rel="preload" as="image" href="loading/friends-px.png?v=2">
 <style>
   /* 合照、字標、進度分開：背景依橫直式切換，載入回呼沿用原版。 */
   :root { --bg:#0e2747; --fg:#fff; --bar:#52d5ff; color-scheme:dark; }
@@ -57,7 +57,7 @@
   <div id="overlay">
     <div class="loading-scene">
       <h1 class="loading-title"><img class="wordmark" src="loading/wordmark-px.png" alt="釣魚人生" width="1296" height="432"></h1>
-      <p class="friends" aria-hidden="true"><img src="loading/friends-px.png" alt="" width="972" height="232" fetchpriority="high"></p>
+      <p class="friends" aria-hidden="true"><img src="loading/friends-px.png?v=2" alt="" width="972" height="232" fetchpriority="high"></p>
       <div class="loading-ui">
         <div id="trackwrap"><div id="track"><div id="fill"></div></div><span id="pct" aria-hidden="true"></span></div>
         <p id="status" role="status">載入中，遊戲即將開始</p>
